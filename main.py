@@ -80,7 +80,13 @@ def reg():
 
 @app.route('/profile', methods=['post', 'get'])
 def profile():
-    return render_template("/profile.html")
+    userlinks = searchUserLinks(session['user'])
+    return render_template("/profile.html", userlinks=userlinks)
+
+@app.route('/logout', methods=['post', 'get'])
+def logout():
+    session.clear()
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run()

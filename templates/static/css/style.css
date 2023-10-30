@@ -10,13 +10,27 @@ main{
 
 header{
    display: grid;
-   grid-template-columns: 35px 35px 85px;
+   grid-template-columns: 35px 1fr;
    align-items: center;
    gap: 10px;
    width: 100%;
    height: 50px;
    background-color: black;
    margin-bottom: 2em;
+}
+
+.div-header{
+   display: grid;
+   grid-template-columns: 35px 85px;
+   align-items: center;
+   gap: 10px;
+}
+
+.div-header-user{
+   display: grid;
+   grid-template-columns: 60px 45px;
+   align-items: center;
+   gap: 10px;
 }
 
 header a{
@@ -65,4 +79,11 @@ button{
    padding: 10px;
    padding-left: 20px;
    padding-right: 20px;
+}
+
+.div-profile-link{
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   align-items: center;
+   gap: 10px;
 }

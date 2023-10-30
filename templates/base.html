@@ -11,10 +11,15 @@
     <header>
       <a href="/">Logo</a>
       {% if 'user' in session: %}
-      <a href="/profile">Профиль</a>
+      <div class="div-header-user">
+        <a href="/profile">Профиль</a>
+        <a href="/logout">Выйти</a>
+      </div>
       {% else: %}
-      <a href="/auth">Вход</a>
-      <a href="/reg">Регистрация</a>
+      <div class="div-header">
+        <a href="/auth">Вход</a>
+        <a href="/reg">Регистрация</a>
+      </div>
       {% endif %}
     </header>
     {% block content %}{% endblock %}
