@@ -11,12 +11,12 @@
     <header>
       <a href="/">Logo</a>
       {% if 'user' in session: %}
-      <div class="div-header-user">
+      <div class="div_header_user">
         <a href="/profile">Профиль</a>
         <a href="/logout">Выйти</a>
       </div>
       {% else: %}
-      <div class="div-header">
+      <div class="div_header">
         <a href="/auth">Вход</a>
         <a href="/reg">Регистрация</a>
       </div>

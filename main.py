@@ -1,13 +1,11 @@
 from flask import Flask, render_template, request, redirect, jsonify, session
 from db import *
-from flask_jwt_extended import create_access_token, JWTManager, get_jwt_identity, jwt_required
 import uuid, hashlib, random, os
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__, template_folder='templates', static_folder='templates/static')
 app.secret_key = os.urandom(30).hex()
 app.config['JWT_SECRET_KEY'] = 'super-secret'
-jwt = JWTManager(app)
 
 if len(seacrAccesses()) == 0:
     i = 0
@@ -20,11 +18,13 @@ if len(seacrAccesses()) == 0:
 def index():
     long_link = request.form.get('long_link')
     accesses = request.form.get('accesses')
+    print(accesses)
+    pseudonym = request.form.get('pseudonym')
     massage = ''
-    if long_link != None:
+    if long_link != None or pseudonym != None:
         if 'user' in session:
             user_short_link = ""
-            user_short_link = hashlib.md5(long_link.encode()).hexdigest()[:random.randint(8, 12)]
+            user_short_link = "https://" + hashlib.md5(long_link.encode()).hexdigest()[:random.randint(8, 12)]
             addLink(long_link,user_short_link,accesses,session['user'])
         else:
             massage = 'Войдите чтобы сокращать ссылки'
@@ -43,9 +43,6 @@ def auth():
                     massage = 'Вы вошли'
                     auth_user = searchUserId(login)[0]
                     session['user'] = auth_user
-                    access_token = create_access_token(identity=login)
-                    # get_jwt_identity()
-                    # jwt_required()
                     return redirect('/profile')
                 else:
                     massage = 'Неверный пароль'
