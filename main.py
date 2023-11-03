@@ -24,7 +24,11 @@ def index():
         if 'user' in session:
             if pseudonym:
                 userPseudonym = "https://" + pseudonym
-                addLink(long_link, userPseudonym, accesses, session['user'])
+                checkPseudonym = seacrhPseudonym(userPseudonym)
+                if len(checkPseudonym) == 0:
+                    addLink(long_link, userPseudonym, accesses, session['user'])
+                else:
+                    massage = 'Данный псевдоним занят'
             else:
                 user_short_link = ""
                 user_short_link = "https://" + hashlib.md5(long_link.encode()).hexdigest()[:random.randint(8, 12)]
@@ -86,6 +90,11 @@ def profile():
 @app.route('/logout', methods=['post', 'get'])
 def logout():
     session.clear()
+    return redirect('/')
+
+@app.route('/test', methods=['post'])
+def test():
+    user = session['user']
     return redirect('/')
 
 if __name__ == '__main__':

@@ -81,3 +81,9 @@ def searchUserLinks(user_id):
     INNER JOIN accesses ON accesses.id = links.access_id
     WHERE links.owner_id = ?
     ''', (user_id,)).fetchall()
+
+def seacrhPseudonym(pseudonym):
+    return cursor.execute('''SELECT short 
+    FROM links
+    WHERE short = ?''',(pseudonym,)).fetchall()
+
