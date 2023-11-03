@@ -18,14 +18,17 @@ if len(seacrAccesses()) == 0:
 def index():
     long_link = request.form.get('long_link')
     accesses = request.form.get('accesses')
-    print(accesses)
     pseudonym = request.form.get('pseudonym')
     massage = ''
-    if long_link != None or pseudonym != None:
+    if long_link != None:
         if 'user' in session:
-            user_short_link = ""
-            user_short_link = "https://" + hashlib.md5(long_link.encode()).hexdigest()[:random.randint(8, 12)]
-            addLink(long_link,user_short_link,accesses,session['user'])
+            if pseudonym:
+                userPseudonym = "https://" + pseudonym
+                addLink(long_link, userPseudonym, accesses, session['user'])
+            else:
+                user_short_link = ""
+                user_short_link = "https://" + hashlib.md5(long_link.encode()).hexdigest()[:random.randint(8, 12)]
+                addLink(long_link,user_short_link,accesses,session['user'])
         else:
             massage = 'Войдите чтобы сокращать ссылки'
     return render_template("index.html", massage=massage)
