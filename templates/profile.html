@@ -9,8 +9,17 @@
       {% for i in userlinks:%}
       <div class="div_profile_link">
         <p>{{i[0]}}</p>
-        <p>{{i[1]}}</p>
+        <a href={{hosthref}}link/{{i[1]}}>{{hosthref}}link/{{i[1]}}</a>
         <p>{{i[2]}}</p>
+        <p>{{i[3]}}</p>
+        <form method="post">
+          <input type="hidden" name="edit_long_name" value={{i[0]}} id=`long_name_{{i[0]}}`>
+          <button name="btn"><img class="profile_img" src="/static/img/edit.svg"></button>
+        </form>
+        <form method="post">
+          <input type="hidden" name="long_name" value={{i[0]}} id={{i[0]}}>
+          <button name="btn"><img class="profile_img" src="/static/img/delete.svg"></button>
+        </form>
       </div>
       {% endfor %}
     </div>

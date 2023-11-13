@@ -5,15 +5,24 @@
 {% block content %}
   <main>
     <form class="form_link form" method="post">
-      <label>Введите ссылку</label>
-      <input type="text" name="long_link">
-      <select name="accesses">
-        <option value="1">публичный</option>
-        <option value="2">приватный</option>
-        <option value="3">общий</option>
-      </select>
-      <input type="text" name="pseudonym">
-      <button>Сократить</button>
+      <h2>Сокращение ссылки</h2>
+      <div>
+        <img class="form_link_img" src="/static/img/link.svg">
+        <input class="form_input" type="text" name="long_link" placeholder="Введите ссылку">
+      </div>
+      <div>
+        <img class="form_link_img" src="/static/img/access.svg">
+        <select name="accesses">
+          <option value="1">публичный</option>
+          <option value="2">общий</option>
+          <option value="3">приватный</option>
+        </select>
+      </div>
+      <div>
+        <img class="form_link_img" src="/static/img/text.svg">
+        <input class="form_input" type="text" name="pseudonym" placeholder="Псевдоним">
+      </div>
+      <button class="form_link_btn">Сократить</button>
       <p class="error">{{massage}}</p>
     </form>
   </main>

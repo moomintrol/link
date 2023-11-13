@@ -14,6 +14,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS "links"
 ("id" INTEGER NOT NULL,
 "long" TEXT NOT NULL,
 "short" TEXT NOT NULL,
+"count" INT NOT NULL,
 "access_id" INTEGER NOT NULL,
 "owner_id" INTEGER NOT NULL,
 primary key ("id" AUTOINCREMENT)
@@ -56,11 +57,11 @@ def auth(login,password):
         ''', (login, password,)).fetchone()
     return "Вы вошли"
 
-def addLink(long,short,access_id,owner_id):
+def addLink(long,short,access_id,owner_id,count = 0):
     cursor.execute('''INSERT INTO
-        links (long,short,access_id,owner_id)
-        VALUES (?,?,?,?)
-        ''', (long,short,access_id,owner_id))
+        links (long,short,count,access_id,owner_id)
+        VALUES (?,?,?,?,?)
+        ''', (long,short,count,access_id,owner_id))
     connect.commit()
 
 def seacrAccesses():
@@ -76,7 +77,7 @@ def addAccesses(level_eng,level_ru):
     return "Добавление категории прошло успешно"
 
 def searchUserLinks(user_id):
-    return cursor.execute('''SELECT links.long, links.short, accesses.level_ru
+    return cursor.execute('''SELECT links.long, links.short, links.count, accesses.level_ru
     FROM links
     INNER JOIN accesses ON accesses.id = links.access_id
     WHERE links.owner_id = ?
@@ -87,3 +88,40 @@ def seacrhPseudonym(pseudonym):
     FROM links
     WHERE short = ?''',(pseudonym,)).fetchall()
 
+def seacrhLongUser(long_link, user_id):
+    return cursor.execute('''SELECT long 
+    FROM links
+    WHERE long = ? AND owner_id = ?''',(long_link,user_id)).fetchall()
+
+def seacrhInfoLink(user_id, long_link):
+    return cursor.execute('''SELECT long, short, access_id
+    FROM links 
+    WHERE owner_id = ? AND long = ?''',(user_id,long_link)).fetchall()
+
+def updateLink(long,short,access_id,user_id):
+    cursor.execute('''UPDATE links
+    SET short = ?, access_id = ?
+    WHERE owner_id = ? AND long = ?''',(short,access_id,user_id,long))
+    connect.commit()
+
+def deleteLink(long_link, user_id):
+    cursor.execute('''DELETE
+    FROM links
+    WHERE long = ? AND owner_id = ?''',(long_link,user_id))
+    connect.commit()
+    return "Удалил"
+
+def searchLinkInfo(short):
+    return cursor.execute('''SELECT long, count, access_id, owner_id
+    FROM links
+    WHERE short = ?''',(short,)).fetchall()
+
+def updateCount(long,count):
+    cursor.execute('''UPDATE links
+    SET count = ?
+    WHERE long = ?''',(count,long))
+    connect.commit()
+
+def accessesInfo():
+    return cursor.execute('''SELECT level_ru
+    FROM accesses''').fetchall()
