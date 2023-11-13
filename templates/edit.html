@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}edit{% endblock %}
+
+{% block content %}
+  <main>
+    <div>
+      <form method="post" class="form_edit">
+        <h2>Редактирование</h2>
+        {% for i in info:%}
+          <label class="form_edit_label">Полная ссылка:</label>
+          <input class="form_edit_input" name="long" value={{i[0]}} />
+          <label class="form_edit_label">Сокращённая ссылка:</label>
+          <input class="form_edit_input" type="text" name="short" value={{i[1]}} />
+          <div class="form_edit_div">
+            <label for="pseudonym">Удалить псевдоним</label>
+            <input name="pseudonym" type="checkbox" id="pseudonym">
+          </div>
+        {% endfor %}
+        <select class="form_edit_input" name="access">
+            {% if info[0][2] == 2: %}
+              <option value="1">публичный</option>
+              <option selected value="2">общий</option>
+              <option value="3">приватный</option>
+            {% elif  info[0][2] == 3: %}
+              <option value="1">публичный</option>
+              <option value="2">общий</option>
+              <option selected value="3">приватный</option>
+            {% else %}
+              <option value="1">публичный</option>
+              <option value="2">общий</option>
+              <option value="3">приватный</option>
+            {% endif %}
+        </select>
+        <button class="form_edit_btn">Редактировать</button>
+      </form>
+      <p>{{massage}}</p>
+    </div>
+  </main>
+{% endblock %}
