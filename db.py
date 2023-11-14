@@ -41,7 +41,7 @@ def searchUser(login):
     return cursor.execute('''SELECT password 
         FROM users
         WHERE login = ? 
-        ''', (login,)).fetchone()
+        ''', (login,)).fetchall()
 
 def searchUserId(login):
     return cursor.execute('''SELECT id 

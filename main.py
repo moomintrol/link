@@ -23,7 +23,6 @@ def index():
     if long_link != None:
         if 'user' in session:
             userLongLink = seacrhLongUser(long_link, session['user'])
-            print(seacrhLongUser(long_link, session['user']))
             if len(userLongLink) == 0:
                 if pseudonym:
                     checkPseudonym = seacrhPseudonym(pseudonym)
@@ -47,10 +46,10 @@ def auth():
     if request.method == 'POST':
         login = request.form.get('login')
         password = request.form.get('password')
-        user = searchUser(login)
         if login != "" and password != "":
-            if len(user) != 0:
-                if check_password_hash(user[0], password) == True:
+            user = searchUser(login)
+            if len(user) > 0:
+                if check_password_hash(user[0][0], password) == True:
                     massage = 'Вы вошли'
                     auth_user = searchUserId(login)[0]
                     session['user'] = auth_user
@@ -73,10 +72,12 @@ def reg():
         confirmPassword = request.form.get('confirm_password')
         user = searchUser(login)
         if login != "" and password != "":
-            if user == None:
+            if len(user) == 0:
                 if confirmPassword == password:
                     hash_password = generate_password_hash(password)
                     registration(login, hash_password)
+                    session['user'] = login
+                    return redirect('/profile')
                 else:
                     massage = 'Пароли не совпадают'
             else:
