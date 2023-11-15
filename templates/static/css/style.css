@@ -17,7 +17,7 @@ header{
    height: 65px;
    background-color: black;
    margin-bottom: 2em;
-   padding: 10px;
+   padding: 10px 20px;
 }
 
 .div_header{
@@ -56,11 +56,16 @@ header a{
    margin: auto;
 }
 
+.padding_form{
+    padding-bottom: 25px;
+}
+
 .form h2{
    color: white;
    margin-top: 1em;
    margin-bottom: 5px;
    width: 210px;
+   text-align: center;
 }
 
 .form_reg{
@@ -199,7 +204,7 @@ button{
    background-color: #9bbb56;
    color: white;
    border: none;
-   width: 210px;
+   width: 300px;
 }
 
 .error{
@@ -268,4 +273,5 @@ button{
    text-align: center;
    text-decoration: none;
    color: grey;
+   padding-top: 10px;
 }
