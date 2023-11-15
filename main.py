@@ -138,31 +138,37 @@ def logout():
 def message():
     return render_template('/message.html')
 
+@app.route('/error')
+def error():
+    return render_template('/error.html')
+
 @app.route('/link/<shortlink>')
 def link(shortlink):
-    link = searchLinkInfo(shortlink)[0]
-    count = link[1]
-    print(shortlink)
-    print(link)
-    if link[2] == 1:
-        updateCount(link[0],count + 1)
-        return redirect(link[0])
-    elif link[2] == 2:
-        if 'user' in session:
-            updateCount(link[0], count + 1)
+    if len(searchLinkInfo(shortlink)) != 0:
+        link = searchLinkInfo(shortlink)[0]
+        count = link[1]
+        if link[2] == 1:
+            updateCount(link[0],count + 1)
             return redirect(link[0])
-        else:
-            return redirect('/auth')
-    elif link[2] == 3:
-        if 'user' in session:
-            print(seacrhLongUser(link[0],session['user']))
-            if len(seacrhLongUser(link[0],session['user'])) > 0:
+        elif link[2] == 2:
+            if 'user' in session:
                 updateCount(link[0], count + 1)
                 return redirect(link[0])
             else:
+                return redirect('/auth')
+        elif link[2] == 3:
+            if 'user' in session:
+                if len(seacrhLongUser(link[0],session['user'])) > 0:
+                    updateCount(link[0], count + 1)
+                    return redirect(link[0])
+                else:
+                    return redirect('/message')
+            else:
                 return redirect('/message')
-        else:
+        elif link[2] == None:
             return redirect('/message')
+    else:
+        return redirect('/error')
 
 if __name__ == '__main__':
     app.run()

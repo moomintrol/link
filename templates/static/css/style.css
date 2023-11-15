@@ -39,6 +39,10 @@ header a{
    color: white;
 }
 
+.h2_message{
+   text-align: center;
+}
+
 .form{
    display: flex;
    flex-direction: column;
