@@ -168,7 +168,7 @@ def link(shortlink):
                 else:
                     return redirect('/message')
             else:
-                return redirect('/auth')
+                return redirect('/message')
         elif link[2] == None:
             return redirect('/message')
     else:
