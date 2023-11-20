@@ -10,7 +10,7 @@ main{
 
 header{
    display: grid;
-   grid-template-columns: 55px 1fr;
+   grid-template-columns: 140px 1fr;
    align-items: center;
    gap: 10px;
    width: 100%;
@@ -110,9 +110,16 @@ button{
    padding-right: 20px;
 }
 
+.div_profile_link p{
+   width: 365px;
+   overflow: hidden;
+   height: auto;
+}
+
 .div_profile_link{
+   width: 1240px;
    display: grid;
-   grid-template-columns: 1fr 1fr 35px 1fr 25px 25px;
+   grid-template-columns: 365px 1fr 35px 1fr 25px 25px;
    align-items: center;
    gap: 10px;
    padding: 5px;

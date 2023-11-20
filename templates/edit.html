@@ -8,8 +8,7 @@
       <form method="post" class="form_edit">
         <h2>Редактирование</h2>
         {% for i in info:%}
-          <label class="form_edit_label">Полная ссылка:</label>
-          <input class="form_edit_input" name="long" value={{i[0]}} />
+          <input type="hidden" class="form_edit_input" name="long" value={{i[0]}} />
           <label class="form_edit_label">Сокращённая ссылка:</label>
           <input class="form_edit_input" type="text" name="short" value={{i[1]}} />
           <div class="form_edit_div">

@@ -49,6 +49,12 @@ def searchUserId(login):
         WHERE login = ? 
         ''', (login,)).fetchone()
 
+def searchUserLogin(id):
+    return cursor.execute('''SELECT login 
+        FROM users
+        WHERE id = ? 
+        ''', (id,)).fetchone()
+
 def auth(login,password):
     cursor.execute('''SELECT * 
         FROM users
@@ -125,3 +131,8 @@ def updateCount(long,count):
 def accessesInfo():
     return cursor.execute('''SELECT level_ru
     FROM accesses''').fetchall()
+
+def seacrhLogin(id):
+    return cursor.execute('''SELECT login
+    FROM users
+    WHERE id = ?''',(id,)).fetchone()

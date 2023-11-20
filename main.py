@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, jsonify, session
+from flask import Flask, render_template, request, redirect, session
 from db import *
-import uuid, hashlib, random, os
+import hashlib, random, os
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__, template_folder='templates', static_folder='templates/static')
@@ -20,25 +20,28 @@ def index():
     accesses = request.form.get('accesses')
     pseudonym = request.form.get('pseudonym')
     massage = ''
-    if long_link != None:
-        if 'user' in session:
-            userLongLink = seacrhLongUser(long_link, session['user'])
-            if len(userLongLink) == 0:
-                if pseudonym:
-                    checkPseudonym = seacrhPseudonym(pseudonym)
-                    if len(checkPseudonym) == 0:
-                        addLink(long_link, pseudonym, accesses, session['user'])
+    if 'user' in session:
+        if long_link != None:
+            if 'user' in session:
+                userLongLink = seacrhLongUser(long_link, session['user'])
+                if len(userLongLink) == 0:
+                    if pseudonym:
+                        checkPseudonym = seacrhPseudonym(pseudonym)
+                        if len(checkPseudonym) == 0:
+                            addLink(long_link, pseudonym, accesses, session['user'])
+                        else:
+                            massage = 'Данный псевдоним занят'
                     else:
-                        massage = 'Данный псевдоним занят'
+                        user_short_link = ""
+                        user_short_link = hashlib.md5(long_link.encode()).hexdigest()[:random.randint(8, 12)]
+                        addLink(long_link,user_short_link,accesses,session['user'])
                 else:
-                    user_short_link = ""
-                    user_short_link = hashlib.md5(long_link.encode()).hexdigest()[:random.randint(8, 12)]
-                    addLink(long_link,user_short_link,accesses,session['user'])
+                    massage = 'Вы уже сокращали эту ссылку'
             else:
-                massage = 'Вы уже сокращали эту ссылку'
-        else:
-            massage = 'Войдите чтобы сокращать ссылки'
-    return render_template("index.html", massage=massage)
+                massage = 'Войдите чтобы сокращать ссылки'
+        return render_template("index.html", massage=massage)
+    else:
+        return redirect('/auth')
 
 @app.route('/auth', methods=['post', 'get'])
 def auth():
@@ -76,7 +79,8 @@ def reg():
                 if confirmPassword == password:
                     hash_password = generate_password_hash(password)
                     registration(login, hash_password)
-                    session['user'] = login
+                    auth_user = searchUserId(login)[0]
+                    session['user'] = auth_user
                     return redirect('/profile')
                 else:
                     massage = 'Пароли не совпадают'
@@ -93,7 +97,7 @@ def profile():
     edit_long_name = request.form.get('edit_long_name')
     userlinks = searchUserLinks(session['user'])
     hosthref = request.host_url
-
+    user_name = searchUserLogin(session['user'])[0]
     if long_name:
         deleteLink(long_name,session['user'])
         return redirect('/profile')
@@ -101,7 +105,7 @@ def profile():
     if edit_long_name:
         session['edit_long_name'] = edit_long_name
         return redirect('/edit')
-    return render_template("/profile.html", userlinks=userlinks, hosthref=hosthref)
+    return render_template("/profile.html", userlinks=userlinks, hosthref=hosthref, user_name=user_name)
 
 @app.route('/edit', methods=['post', 'get'])
 def edit():
@@ -164,7 +168,7 @@ def link(shortlink):
                 else:
                     return redirect('/message')
             else:
-                return redirect('/message')
+                return redirect('/auth')
         elif link[2] == None:
             return redirect('/message')
     else:
